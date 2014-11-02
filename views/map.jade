@@ -1,15 +1,16 @@
 extends layout
 
 block content
-  script(src="http://code.jquery.com/jquery-2.1.0.min.js")
-  script(src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCjj9c4BHHyUnpjj2-sYiaEOPN7uGxMVaI")
-  script(src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js")
+  script(src="https://code.jquery.com/jquery-2.1.0.min.js")
+  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjj9c4BHHyUnpjj2-sYiaEOPN7uGxMVaI")
+  script(src="https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js")
+  script(src="https://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.0.1/src/markerwithlabel_packed.js")
 
   script.
     function initialize() {
       var mapOptions = {
-          center: { lat: 42.3581, lng: -71.0636},
-          zoom: 12
+          center: { lat: 32.3581, lng: -98.0636},
+          zoom: 4
         };
         var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
@@ -22,6 +23,13 @@ block content
             lng = parseFloat(data[i+1]);
             createLatLng();
           }
+         var chestData = !{chestData};
+          for (var i = 0; i < chestData.length; i += 2) {
+            var location = '(' + parseFloat(chestData[i])+ ', ' + parseFloat(chestData[i+1]) + ')';
+            lat = parseFloat(chestData[i]);
+            lng = parseFloat(chestData[i+1]);
+            createChestLatLng();
+          }
           console.log(markers);
           var markerCluster = new MarkerClusterer(map, markers);
 
@@ -29,13 +37,27 @@ block content
             var latLng = new google.maps.LatLng(lat, lng);
             console.log(latLng);
             var marker = new google.maps.Marker({
-              position: latLng
+              position: latLng,
             });
             markers.push(marker);
+
+          }
+
+          function createChestLatLng() {
+            var latLng = new google.maps.LatLng(lat, lng);
+            var marker = new MarkerWithLabel({
+              position: latLng,
+              map: map,
+              labelContent: "10",
+              labelAnchor: new google.maps.Point(22, 0),
+              labelClass: "labels", // the CSS class for the label
+              labelStyle: {opacity: 0.75}
+            });
+
+
           }
     }
 
       google.maps.event.addDomListener(window, 'load', initialize);
   h1= "Yo Coin"
-  h2= "Boston"
   div(id="map-canvas")

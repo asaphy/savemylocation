@@ -72,17 +72,25 @@ router.get('/map', function(req, res) {
                         "lng" : user.coordinates[i+1]
                     });
                 }
-                
-                fs.writeFile(outputFilename, JSON.stringify(queriedusers, null, 4), function(err) {
-                    if(err) {
-                      console.log(err);
-                    } else {
-                      console.log("JSON saved to " + outputFilename);
+                User.findOneAndUpdate({ name: "YoChests" }, { name: "YoChests" }, function (err, chestDatagram) {
+                    for(i = 0; i < chestDatagram.coordinates.length; i += 2){
+                        chestDatagram.coordinates.push({ 
+                            "lat" : chestDatagram.coordinates[i],
+                            "lng" : chestDatagram.coordinates[i+1]
+                        });
                     }
-                }); 
+
+                    for(i = 0; i < chestDatagram.coins; i++) {
+                        chestDatagram.coins.push({
+                            "coins" : chestDatagram.coins
+                        });
+                    }
                     res.render("map", {
                         data: JSON.stringify(user.coordinates),
+                        chestData: JSON.stringify(chestDatagram.coordinates),
+                        chestCoins: JSON.stringify(chestDatagram.coins),
                     });
+                })
                 })
           }
      });
@@ -111,11 +119,31 @@ router.get('/helloworld', function(req, res) {
 
     googlePlaces.placeSearch(parameters, function (response) {
         location = response.results[0].name
-        console.log(user);
-        console.log(location);
         
         var query = { name: user };
         var docCount = 0;
+
+        // User.count({ name: "YoChests" }, function (err, count) {
+        //   if (err) return;
+        //   docCount = count;
+        //   console.log(docCount);
+        //   if (docCount == 0){
+        //     console.log("No Chests Right Now :(");
+        //   } else {
+        //         User.findOneAndUpdate(query, { name: "YoChests" }, function (err, yoChest) {
+        //         if (err) return handleError(err);
+        //         lat = yoChest.coordinates[0];
+        //         lng = yoChest.coordinates[0];
+        //         userlat = location[0];
+        //         userlng = location[0];
+        //         console.log('%s x %s.', lat, lng);
+        //         console.log('%s x %s.', userlat, userlng);
+        //         //user.save(function (err) {if (err) console.log ('Error on save!')});
+        //         })
+        //   }
+        // });  
+
+
 
         User.count({ name: user }, function (err, count) {
           if (err) return;

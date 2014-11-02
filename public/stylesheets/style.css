@@ -7,9 +7,25 @@ a {
   color: #00B7FF;
 }
 
-html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+html, body, #map-canvas { height: 100%; margin: 0; padding: 0; background: white;}
 
 h1{
 	margin: auto 0;
-	padding: 10px 0 0 100px;
+	padding: 10px 40% 10px 40%;
+	font-family: Helvetica, sans-serif;
+	font-weight: 100;
+	font-size: 50px;
+	text-align: center;
 }
+
+.labels {
+   color: red;
+   background-color: white;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 60px;     
+   border: 2px solid black;
+   white-space: nowrap;
+ }
